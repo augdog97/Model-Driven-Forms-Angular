@@ -5,16 +5,13 @@
  * If there are spaces in it, we return cannotContainSpace: true, and if there are no spaces, we return null.
  */
 
- import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
- export class PasswordValidator {
-     static cannotContainSpace(formControl: FormControl) {
-         if(formControl.value.indexOf('')>= 0) {
-             return { cannotContainSpace: true };
-         }
-         else {
-             return null;
-         }
-         
-     }
- }
+export class PasswordValidator {
+    static cannotContainSpace(formControl: FormControl) {
+        if (formControl.value.indexOf(' ') >= 0)
+            return { cannotContainSpace: true };
+
+        return null;
+    }
+}

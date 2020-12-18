@@ -10,29 +10,45 @@
   3. Import the PasswordValidator and apply it to "password". Because we have more than one validator on "password" form control, we need to compose the multiple validators by calling Validators.compose method. 
     - The compost method takes in an array of validators. 
   4. Creating the login method that is binded to ngSubmit
+    - Imported and used dependency injection in the construcvtor to get an instance of LoginService. 
+    - login() method calls login method in loginService instance with the user-keyed in values of username and password. 
+      - this.form.controls['password'], this.form.controls['username']. Access the value property of username and password control inside "form" to get user-keyed in values
+    - login method returns result as true if the login creds are valid. If false, we access the password FormControl with this.form.controls['password'] and call its setErrors method to supply the error invalidLogin: true. 
+    - true can also be replaced with a value or object to provide more details about the validation. 
 */
 
 
-import { Component, OnInit } from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import {PasswordValidator} from '../passwordValidator';
+import { PasswordValidator } from '../passwordValidator';
+import { LoginService } from '../login.service';
 
 @Component({
   selector: 'login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: 'login.component.html'
 })
-export class LoginComponent   {
+export class LoginComponent {
+
   form: FormGroup;
- constructor(fb: FormBuilder) {
+
+  constructor(fb: FormBuilder, private _loginService: LoginService) {
+
     this.form = fb.group({
-      username:["", Validators.required],
-      password:["", Validators.compose([Validators.required, PasswordValidator.cannotContainSpace])]
+      username: ['', Validators.required],
+      password: ['', Validators.compose([Validators.required,
+      PasswordValidator.cannotContainSpace])]
     })
- }
+  }
 
   login() {
-    console.log(this.form.value);
+    var result = this._loginService.login(this.form.controls['username'].value,
+      this.form.controls['password'].value);
+
+    if (!result) {
+      this.form.controls['password'].setErrors({
+        invalidLogin: true
+      });
+    }
   }
 }

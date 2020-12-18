@@ -8,6 +8,7 @@
     4. We check to see if the password has errors and not just valid becasue there are now more than one kind of errors for password. 
         - We use password.errors. 
         - Need to have a nested *ngIf for each error to check for each type of error specifically.  
+    5. Create a div with an if statement that checks for the error invalidLogin and then to display the alert message. 
 -->
 
 <form [formGroup]='form' (ngSubmit)="login()"> 
@@ -24,6 +25,9 @@
         <input type="password" id="password" class="form-control" 
             formControlName="password"/>
             <div *ngIf="form.controls.password.touched && form.controls.password.errors">
+                <div *ngIf="form.controls.password.errors.invalidLogin" class="alert alert-danger">
+                    Username or password is invalid!
+                </div>
                 <div *ngIf="form.controls.password.errors.required" class="alert alert-danger">
                     Password is required!
                 </div>
