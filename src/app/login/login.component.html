@@ -5,8 +5,9 @@
     3. Then we associate each input field to the FormControl object by using formControlName directive. 
         - This is important for referencing the FormControl obejct from FormGroup. Angular will look at the FormGRoup object and expects to find the FormControl object with the exact name we specify in "formControlName"
         - If it cant find a control with that name then it will throw an exception.
-    4. We then check username CSS classes touched and valid to see if the control has been touched and the input value is not valid. 
-        - if so, then display the message within the div. 
+    4. We check to see if the password has errors and not just valid becasue there are now more than one kind of errors for password. 
+        - We use password.errors. 
+        - Need to have a nested *ngIf for each error to check for each type of error specifically.  
 -->
 
 <form [formGroup]='form' (ngSubmit)="login()"> 
@@ -22,8 +23,13 @@
         <label for="password">Password</label>
         <input type="password" id="password" class="form-control" 
             formControlName="password"/>
-            <div *ngIf="form.controls.password.touched && !form.controls.password.valid" class="alert alert-danger">
-                Password is required!
+            <div *ngIf="form.controls.password.touched && form.controls.password.errors">
+                <div *ngIf="form.controls.password.errors.required" class="alert alert-danger">
+                    Password is required!
+                </div>
+                <div *ngIf="form.controls.password.cannotContainSpace" class="alert alert-danger">
+                    Password cannot contain space!
+                </div>
             </div>
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
